@@ -25,6 +25,7 @@ function run_strtotime() {
 	
 }
 function run_date() {
+	date_default_timezone_set('America/Los_Angeles');
 	for ($i = 0; $i <= DATE_IT; $i++) {
 		$num = rand();
 		$day = $num%28 + 1;

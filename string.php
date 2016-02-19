@@ -79,12 +79,14 @@ MIUSN
 HHZBZ
 RTORR";
 
-$s5 = "if (a == b) {
+$s5 = " { }  
+if (a == b) {
 	//do something
 	++a;
 	} else {
 		b +=a;
-	}";
+	}   }  
+	";
 // Wikipedia.org Intel Core(microarchitecture)
 $s6 = "The Intel Core microarchitecture (previously known as the Next-Generation Micro-Architecture) is a multi-core processor microarchitecture unveiled by Intel in Q1 2006. It is based on the Yonah processor design and can be considered an iteration of the P6 microarchitecture, introduced in 1995 with Pentium Pro. The high power consumption and heat intensity, the resulting inability to effectively increase clock speed, and other shortcomings such as the inefficient pipeline were the primary reasons for which Intel abandoned the NetBurst microarchitecture and switched to completely different architectural design, delivering high efficiency through a small pipeline rather than high clock speeds. The Core microarchitecture never reached the clock speeds of the Netburst microarchitecture, even after moving to 45 nm lithography.
 The first processors that used this architecture were code-named 'Merom', 'Conroe', and 'Woodcrest'; Merom is for mobile computing, Conroe is for desktop systems, and Woodcrest is for servers and workstations. While architecturally identical, the three processor lines differ in the socket used, bus speed, and power consumption. Mainstream Core-based processors are branded Pentium Dual-Core or Pentium and low end branded Celeron; server and workstation Core-based processors are branded Xeon, while desktop and mobile Core-based processors are branded as Core 2. Despite their names, processors sold as Core Solo/Core Duo and Core i3/i5/i7 do not actually use the Core microarchitecture and are based on the Enhanced Pentium M and newer Nehalem/Sandy Bridge/Haswell/Skylake microarchitectures, respectively.
@@ -104,6 +106,23 @@ $s7 = " _______           _______  _______  _______  _        _______
 $strings = array($s0, $s1, $s2, $s3, $s4, $s5, $s6, $s7);
 $split_strings = array();
 
+function  repcb($matches) {
+            return "s";
+}
+
+function run_unserialize() {
+	$strings_array = $GLOBALS['strings'];
+	$ser_array = serialize($strings_array);
+	$ser_no = STRING_SERIALIZE_IT;
+	
+	for ($i=0; $i < STRING_SERIALIZE_IT; $i++) {
+		$ser_array = serialize($strings_array);
+	}
+
+	for ($i=0; $i < STRING_UNSERIALIZE_IT; $i++) {
+		$var = unserialize($ser_array);
+	}
+}
 // does some dummy replacements
 function run_string_preg_replace() {
 	$strs = $GLOBALS['strings'];
@@ -119,6 +138,25 @@ function run_string_preg_replace() {
 			$rez1 = preg_replace('/[1-9]/', "1", $strs[$j]);
 			$rez2 = preg_replace('/[A-Z]/', "_",$rez1);
 			$rez3 = preg_replace('/[a-z]+/', "*", $rez2);
+			//echo $rez3;
+		}
+
+	}
+}
+function run_string_preg_replace_callback() {
+	$strs = $GLOBALS['strings'];
+	
+	$patterns = array("/process/", "/Intel/", "/10/", "/DOS/", "/uranium/", "/php/");
+	$replacements = array("thread", "Spark", "12", "MS", "Iron", "python");
+	
+	$len = sizeof($strs);
+	for ($i = 0; $i < STRING_PREG_REPLACE_CALLBACK_IT ;$i++){
+		for ($j=0; $j < $len; $j++) {
+			$rez = preg_replace_callback($patterns, 'repcb', $strs[$j]);
+			$rez = preg_replace_callback('/\s+/', 'repcb', $rez);	
+			$rez1 = preg_replace_callback('/[1-9]/', 'repcb', $strs[$j]);
+			$rez2 = preg_replace_callback('/[A-Z]/', 'repcb',$rez1);
+			$rez3 = preg_replace_callback('/[a-z]+/', 'repcb', $rez2);
 			//echo $rez3;
 		}
 
@@ -151,12 +189,8 @@ function run_string_preg_split() {
 	for ($i = 0; $i < STRING_SPLIT_IT ;$i++){
 		for ($j=0; $j < $len; $j++) {
 			$keywords = preg_split("/[\s,]+/", $strs[$j]);
-			if ($j == 0)
+			if ($i == 0 && $j==0)
 				array_push($GLOBALS['split_strings'], $keywords);
-			$num_tokens = sizeof($keywords);
-			for ($k = 0; $k < $num_tokens; $k++) {
-				$chars = preg_split('//', $keywords[$k], -1, PREG_SPLIT_NO_EMPTY);
-			}
 		}
 
 	}
@@ -212,6 +246,38 @@ function run_string_echo() {
 			}
 		}
 	}
+}
+
+function run_string_concat() {
+	
+	for($i = 0; $i < STRING_CONCAT_IT; $i++) {
+		$var = STRING_ECHO_IT . ' ' . STRING_CHECKENCODING_IT . ' ' . STRING_STRTOLOWER_IT . "/this/is/some/random/path";
+		$var1 = $var . ' - ' . $GLOBALS['s7'];
+		$var2 = "I am happy." . "\n" . "You are " . SQL_QUERIES_IT . "x happier ";
+		$num_var = 32;
+		$ret = $var1 . (string) $num_var;
+	}
+
+}
+
+function run_string_trim() {
+	$str = $GLOBALS['s5'];
+	for($i = 0; $i < STRING_TRIM_IT; $i++) {
+		$s = trim($str, " \t\n}{"); 
+	}
+}
+
+function run_string_md5() {
+	$str = $GLOBALS['s6'];
+	for($i = 0; $i < STRING_MD5_IT; $i++) {
+		$s = md5($str); 
+	}	
+}
+function run_string_implode() {
+	$strings_array = $GLOBALS['strings'];
+	for($i = 0; $i < STRING_IMPLODE_IT; $i++) {
+		$s = implode($strings_array); 
+	}	
 }
 
 ?>

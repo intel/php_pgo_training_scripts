@@ -1,12 +1,14 @@
 <?php
 
 require_once('constants.php');
-
+//require_once('constants_T.php');
 //require_once("db.php");
 include 'db.php';
 include 'time.php';
 include 'string.php';
 include 'standard_calls.php';
+include 'class.php';
+include 'hash.php';
 function run_mysql_queries() {
 	$newDB = new db(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
 	if (!$newDB->check_connection())
@@ -43,15 +45,33 @@ function run_string() {
 		You will find those in constants.php
 	*/
 	run_string_preg_replace();
+	run_string_preg_replace_callback();
 	run_string_preg_split();
 	run_string_strtolower();
 	run_string_check_encoding();
 	run_string_str_replace();
 	run_string_in_array();
+	run_unserialize();
+	run_string_trim();
+	run_string_md5();
+	run_string_implode();
 
 }
 
 function run_standard() {
 	run_standard_calls();
+	run_array_map();
+	run_array_merge();
+	run_preg_match();
+	run_parse_url();
+	run_version_compare();
+	run_file_exists();
+	run_file_operations();
+}
+function run_class() {
+	run_create_classes();
+}
+function run_hash() {
+	run_hash_array();
 }
 ?>
