@@ -94,7 +94,12 @@ function run_file_operations() {
 		fclose($file);
 	}
 }
-function run_if_md5() {
-
+function run_func_exists() {
+	for ($i=0; $i < FUNC_EXISTS_IT ; $i++)
+		if (function_exists("version_compare"))
+			if(function_exists("run_preg_match"))
+				if(function_exists("fff-XXxX"))
+				{	//do nothing
+				}
 }
 ?>

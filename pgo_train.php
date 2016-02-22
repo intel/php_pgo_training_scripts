@@ -14,8 +14,17 @@ function add_entry($name, $value) {
     $references[$name] = 1;
   }
   $dictionary[$name] = $value;
-  return count($dictionary);
+  count($dictionary);
 }
+
+function get_array_keys() {
+  return array_keys($GLOBALS['dictionary']);
+}
+
+function get_array_values() {
+  return array_values($GLOBALS['dictionary']);
+}
+
 
 // function get_string_from_number($n) {
 //   /* set string length to 16 - 16+32  */
@@ -34,8 +43,14 @@ function fill_dictionary($size) {
     //echo $Keys[$i%KEYS_SIZE];
     add_entry($GLOBALS["KEYS"][$i%KEYS_SIZE], $i);
   }
-  //$Keys = null;
-  //$GLOBALS["KEYS"] = null;
+  
+  for ($i = 0; $i < ARRAY_KEYS_IT; $i++) {
+    $keys = get_array_keys();
+  }  
+  for ($i = 0; $i < ARRAY_KEYS_IT; $i++) {
+    $keys = get_array_values();
+  }  
+
 }
 function getmicrotime()
 {

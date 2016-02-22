@@ -201,7 +201,7 @@ function run_string_strtolower() {
 	$len = sizeof($strs);
 	for ($i = 0; $i < STRING_STRTOLOWER_IT ;$i++){
 		for ($j=0; $j < $len; $j++) {
-			$val = strtolower($strs[$j]);
+			$val = mb_strtolower($strs[$j]);
 		}
 	}
 }
