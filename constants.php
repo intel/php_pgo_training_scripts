@@ -4,9 +4,11 @@ define('DB_USER', 'root');
 define('DB_PASSWORD', '');
 define('DB_NAME', 'pgo_train');
 define('DB_HOST', 'localhost');
+define('KEYS_SIZE', 1000);
+
 /* how many iterations each type of benchmark
 	will run */
-define('DICTIONARY_IT', 10000);
+define('DICTIONARY_IT', 10000000);
 
 define('SQL_QUERIES_IT', 600);
 

@@ -2,6 +2,7 @@
 
 require_once('index.php');
 require_once('constants.php');
+require_once('keys.php');
 $dictionary = array();
 $references = array();
 
@@ -16,20 +17,25 @@ function add_entry($name, $value) {
   return count($dictionary);
 }
 
-function get_string_from_number($n) {
-  /* set string length to 16 - 16+32  */
-  $size = 16 + ($n % 32);
-  $string = 'q' . $n;
-  for ($i = strlen($string); $i < $size; $i++) {
-    $string .= "#";
-  }
-  return $string;
-}
+// function get_string_from_number($n) {
+//   /* set string length to 16 - 16+32  */
+//   $size = 16 + ($n % 32);
+//   $string = 'q' . $n;
+//   for ($i = strlen($string); $i < $size; $i++) {
+//     $string .= "#";
+//   }
+//   echo $string . "\n";
+//   return $string;
+// }
 
 function fill_dictionary($size) {
+  //$Keys = ;
   for ($i = 0; $i < $size; $i++) {
-    add_entry(get_string_from_number($i), $i);
+    //echo $Keys[$i%KEYS_SIZE];
+    add_entry($GLOBALS["KEYS"][$i%KEYS_SIZE], $i);
   }
+  //$Keys = null;
+  //$GLOBALS["KEYS"] = null;
 }
 function getmicrotime()
 {
