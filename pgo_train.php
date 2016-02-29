@@ -14,7 +14,7 @@ function add_entry($name, $value) {
     $references[$name] = 1;
   }
   $dictionary[$name] = $value;
-  count($dictionary);
+  //count($dictionary);
 }
 
 function get_array_keys() {
@@ -38,11 +38,15 @@ function get_array_values() {
 // }
 
 function fill_dictionary($size) {
-  //$Keys = ;
-  for ($i = 0; $i < $size; $i++) {
-    //echo $Keys[$i%KEYS_SIZE];
-    add_entry($GLOBALS["KEYS"][$i%KEYS_SIZE], $i);
-  }
+  $IT = $size / KEYS_SIZE;
+  $KEYS = $GLOBALS["KEYS"];
+  for($j=0; $j < $IT; $j++)
+    for ($i = 0; $i < KEYS_SIZE; $i++) {
+      $name = 'KEYS';
+      add_entry($KEYS[$i], $i);
+      $new = $$name[$i];
+      $new = null;
+    }
   
   for ($i = 0; $i < ARRAY_KEYS_IT; $i++) {
     $keys = get_array_keys();
@@ -146,6 +150,7 @@ run_class();
 $t = end_test($t, "run_class(" . CLASS_STUDENT_IT . ")");
 run_class();
 $t = end_test($t, "run_class(" . CLASS_STUDENT_IT . ")");
+
 
 total($t0, "Total");
 ?>

@@ -4,11 +4,11 @@ define('DB_USER', 'root');
 define('DB_PASSWORD', '');
 define('DB_NAME', 'pgo_train');
 define('DB_HOST', 'localhost');
-define('KEYS_SIZE', 1000);
+define('KEYS_SIZE', 50);
 
 /* how many iterations each type of benchmark
 	will run */
-define('DICTIONARY_IT', 5000000);
+define('DICTIONARY_IT', 3000000);
 
 define('SQL_QUERIES_IT', 400);
 
@@ -30,7 +30,8 @@ define('STRING_CONCAT_IT',1);
 define('STRING_MD5_IT', 1000);
 define('STRING_IMPLODE_IT', 10000);
 
-define('STANDARD_CALL_IT', 1);
+define('STANDARD_CALL_IT', 10000);
+define('INI_SET_IT',1000);
 define('FUNC_EXISTS_IT',10000);
 define('FILE_OPS_IT', 100);
 define('FILE_EXISTS_IT', 5000);
