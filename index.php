@@ -9,6 +9,27 @@ include 'string.php';
 include 'standard_calls.php';
 include 'class.php';
 include 'hash.php';
+
+include ("dummy_functions/f0.php");
+include ("dummy_functions/f2.php");
+include ("dummy_functions/f3.php");
+include ("dummy_functions/f4.php");
+include ("dummy_functions/f5.php");
+include ("dummy_functions/f6.php");
+include ("dummy_functions/f7.php");
+include ("dummy_functions/f8.php");
+include ("dummy_functions/f9.php");
+
+include ("dummy_functions/class_f0.php");
+include ("dummy_functions/class_f2.php");
+include ("dummy_functions/class_f3.php");
+include ("dummy_functions/class_f4.php");
+include ("dummy_functions/class_f5.php");
+include ("dummy_functions/class_f6.php");
+include ("dummy_functions/class_f7.php");
+include ("dummy_functions/class_f8.php");
+include ("dummy_functions/class_f9.php");
+
 function run_mysql_queries() {
 	$newDB = new db(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
 	if (!$newDB->check_connection())
@@ -165,16 +186,16 @@ function run_string() {
 }
 
 function run_standard() {
-	$STANDARD_CALL_IT = 100000;
-	$INI_SET_IT = 1000;
-	$FUNC_EXISTS_IT = 10000;
-	$FILE_OPS_IT = 100;
-	$FILE_EXISTS_IT = 5000;
-	$ARRAY_MAP_IT = 42000;
-	$VERSION_COMPARE_IT = 12000;
-	$ARRAY_MERGE_IT = 125000;
-	$PREG_MATCH_IT  = 100000;
-	$PARSE_URL_IT = 10000;
+	$STANDARD_CALL_IT = 10000;
+	$INI_SET_IT = 100;
+	$FUNC_EXISTS_IT = 1000;
+	$FILE_OPS_IT = 10;
+	$FILE_EXISTS_IT = 500;
+	$ARRAY_MAP_IT = 4200;
+	$VERSION_COMPARE_IT = 1200;
+	$ARRAY_MERGE_IT = 12500;
+	$PREG_MATCH_IT  = 10000;
+	$PARSE_URL_IT = 1000;
 
 
 	run_standard_calls($STANDARD_CALL_IT);
@@ -193,14 +214,4 @@ function run_class() {
 function run_hash() {
 	run_hash_array();
 }
-include("inc_files/f1.php");
-include("inc_files/f2.php");
-include("inc_files/f3.php");
-include("inc_files/f4.php");
-include("inc_files/f5.php");
-include("inc_files/f6.php");
-include("inc_files/f7.php");
-include("inc_files/f8.php");
-include("inc_files/f9.php");
-include("inc_files/f10.php");
 ?>
