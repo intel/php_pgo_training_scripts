@@ -1,15 +1,30 @@
 <?php
+/**************************************************************************
+* Pgo Train Benchmark
+*
+* Copyright (c) 2016, Intel Corporation.
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms and conditions of the GNU General Public License,
+* version 2, as published by the Free Software Foundation.
+*
+* This program is distributed in the hope it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+* more details.
+***************************************************************************/
 
 require_once('constants.php');
-//require_once('constants_T.php');
-//require_once("db.php");
 include 'db.php';
 include 'time.php';
 include 'string.php';
 include 'standard_calls.php';
 include 'class.php';
-include 'hash.php';
 
+/**
+*	Include huge sections of php code in order to
+* train compile section for consecutive requests.
+*/
 include ("dummy_functions/f0.php");
 include ("dummy_functions/f2.php");
 include ("dummy_functions/f3.php");
@@ -20,6 +35,9 @@ include ("dummy_functions/f7.php");
 include ("dummy_functions/f8.php");
 include ("dummy_functions/f9.php");
 
+/**
+*	Include huge section of class code.
+*/
 include ("dummy_functions/class_f0.php");
 include ("dummy_functions/class_f2.php");
 include ("dummy_functions/class_f3.php");
@@ -30,13 +48,14 @@ include ("dummy_functions/class_f7.php");
 include ("dummy_functions/class_f8.php");
 include ("dummy_functions/class_f9.php");
 
+/**
+*	Calls Mysql functions from db.php
+*/
 function run_mysql_queries() {
 	$newDB = new db(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
 	if (!$newDB->check_connection())
 		die("Connection closed...");
 	else {
-		//$newDB->_do_query();
-		//$row = $newDB->get_row("SELECT * from table_one", ARRAY_N);
 		$names = array("\"WinnieThePooh\"" , "\"Mickey Mouse\"", "\"something\"", "\"random_name\"", "\"YetAnotherName\"", "\"NotINTable\"");
 		for ($i=0; $i < SQL_QUERIES_IT; $i++) {
 			first_query($newDB);
@@ -46,26 +65,26 @@ function run_mysql_queries() {
 			}
 			select_INNER_JOIN($newDB);
 			multiple_WHERE_CLAUSES($newDB);
-		}
-		//echo $row[1] . "\n";
-		//echo "Queries made: " .  $newDB->num_queries . "\n";
-			
+		}	
 	}
 }
 
+/**
+*	Calls related to date/time from time.php
+*/
 function run_time() {
-	/*	Modify STRTOTIME_IT and DATE_IT to change proportions 
-		You will find those in constants.php
-	*/
 	run_strtotime();
 	run_date();
 }
 
+/**
+*	Calls all string processing functions from string.php
+*/
 function run_string() {
-	/*	Modify STRING_*_IT to change proportions 
-		You will find those in constants.php
-	*/
 
+	/** Six strings variables and an array used as parameters
+	*	to string processing functions
+	*/
 	$s0 = "Uranium is a chemical element with symbol U and atomic number 92.
 	It is a silvery-white metal in the actinide series of the periodic table.
 	A uranium atom has 92 protons and 92 electrons, of which 6 are valence electrons. 
@@ -82,7 +101,7 @@ function run_string() {
 	$s2 = "php benchmark php benchmark php pgo benchmark php pgo benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark pgo php benchmark pgo php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark php benchmark {
 		php benchmark php benchmark php benchmark php benchmark pgo php benchmark php benchmark php benchmark pgo php benchmark php benchmark php benchmark php benchmark pgo php benchmark }";
 
-	//random number string
+	// random numbers string
 	$s3 = "2459
 	2410
 	0733
@@ -114,6 +133,7 @@ function run_string() {
 	4314
 	8481";
 
+	// random letters string
 	$s4 = "FVVLV
 	KMGDL
 	BUCGC
@@ -145,6 +165,7 @@ function run_string() {
 	HHZBZ
 	RTORR";
 
+
 	$s5 = " { }  
 	if (a == b) {
 		//do something
@@ -153,6 +174,7 @@ function run_string() {
 			b +=a;
 		}   }  
 		";
+
 	// Wikipedia.org Intel Core(microarchitecture)
 	$s6 = "The Intel Core microarchitecture (previously known as the Next-Generation Micro-Architecture) is a multi-core processor microarchitecture unveiled by Intel in Q1 2006. It is based on the Yonah processor design and can be considered an iteration of the P6 microarchitecture, introduced in 1995 with Pentium Pro. The high power consumption and heat intensity, the resulting inability to effectively increase clock speed, and other shortcomings such as the inefficient pipeline were the primary reasons for which Intel abandoned the NetBurst microarchitecture and switched to completely different architectural design, delivering high efficiency through a small pipeline rather than high clock speeds. The Core microarchitecture never reached the clock speeds of the Netburst microarchitecture, even after moving to 45 nm lithography.
 	The first processors that used this architecture were code-named 'Merom', 'Conroe', and 'Woodcrest'; Merom is for mobile computing, Conroe is for desktop systems, and Woodcrest is for servers and workstations. While architecturally identical, the three processor lines differ in the socket used, bus speed, and power consumption. Mainstream Core-based processors are branded Pentium Dual-Core or Pentium and low end branded Celeron; server and workstation Core-based processors are branded Xeon, while desktop and mobile Core-based processors are branded as Core 2. Despite their names, processors sold as Core Solo/Core Duo and Core i3/i5/i7 do not actually use the Core microarchitecture and are based on the Enhanced Pentium M and newer Nehalem/Sandy Bridge/Haswell/Skylake microarchitectures, respectively.
@@ -185,6 +207,9 @@ function run_string() {
 
 }
 
+/** Standard php calls. Use variables defined below to
+*	control the proportions of different standard calls.
+*/
 function run_standard() {
 	$STANDARD_CALL_IT = 10000;
 	$INI_SET_IT = 100;
@@ -214,4 +239,3 @@ function run_class() {
 function run_hash() {
 	run_hash_array();
 }
-?>

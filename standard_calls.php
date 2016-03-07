@@ -1,8 +1,27 @@
 <?php
-//require_once('constants.php');
+/**************************************************************************
+* Pgo Train Benchmark
+*
+* Copyright (c) 2016, Intel Corporation.
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms and conditions of the GNU General Public License,
+* version 2, as published by the Free Software Foundation.
+*
+* This program is distributed in the hope it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+* more details.
+***************************************************************************/
+
 require_once('constants.php');
+/**
+*	Standard calls of 
+*/
+
 define('NOT_USED', 420);
 define('NOT_USED1', 777);
+
 $var_g = "The Intel Core microarchitecture (previously known as the Next-Generation Micro-Architecture)";// is a multi-core processor microarchitecture unveiled by Intel in Q1 2006. It is based on the Yonah processor design and can be considered an iteration of the P6 microarchitecture, introduced in 1995 with Pentium Pro. The high power consumption and heat intensity, the resulting inability to effectively increase clock speed, and other shortcomings such as the inefficient pipeline were the primary reasons for which Intel abandoned the NetBurst microarchitecture and switched to completely different architectural design, delivering high efficiency through a small pipeline rather than high clock speeds. The Core microarchitecture never reached the clock speeds of the Netburst microarchitecture, even after moving to 45 nm lithography.";
 $var1_g = "The = Intel = Core";
 $some_url_g = "http://CentOs:password@intel:8080/go?arg=link#text";
@@ -35,7 +54,6 @@ function run_standard_calls($STANDARD_CALL_IT) {
 		array_pop($test_array);
 		array_diff($test_array1, $test_array);
 		extract($test_array, EXTR_PREFIX_SAME, "wddx");
-		//printf("%.02lf\n", 1.035);
 		$ks = array_keys($test_array);
 		
 	}

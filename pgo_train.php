@@ -1,5 +1,20 @@
 <?php
 
+/**************************************************************************
+* Pgo Train Benchmark
+*
+* Copyright (c) 2016, Intel Corporation.
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms and conditions of the GNU General Public License,
+* version 2, as published by the Free Software Foundation.
+*
+* This program is distributed in the hope it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+* more details.
+***************************************************************************/
+
 require_once('index.php');
 require_once('constants.php');
 require_once('keys.php');
@@ -25,17 +40,6 @@ function get_array_values() {
   return array_values($GLOBALS['dictionary']);
 }
 
-
-// function get_string_from_number($n) {
-//   /* set string length to 16 - 16+32  */
-//   $size = 16 + ($n % 32);
-//   $string = 'q' . $n;
-//   for ($i = strlen($string); $i < $size; $i++) {
-//     $string .= "#";
-//   }
-//   echo $string . "\n";
-//   return $string;
-// }
 
 function fill_dictionary($size) {
   $IT = $size / KEYS_SIZE;
@@ -153,4 +157,4 @@ $t = end_test($t, "run_class(" . CLASS_STUDENT_IT . ")");
 
 
 total($t0, "Total");
-?>
+

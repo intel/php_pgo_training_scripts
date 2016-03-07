@@ -1,5 +1,23 @@
 <?php
+/**************************************************************************
+* Pgo Train Benchmark
+*
+* Copyright (c) 2016, Intel Corporation.
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms and conditions of the GNU General Public License,
+* version 2, as published by the Free Software Foundation.
+*
+* This program is distributed in the hope it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+* more details.
+***************************************************************************/
 
+/**
+*	This php file contains calls to standard string processing functions.
+*	Each standard call function have a "run_string_" prefix.
+*/
 $split_strings = array();
 
 function  repcb($matches) {
@@ -7,7 +25,6 @@ function  repcb($matches) {
 }
 
 function run_unserialize($strings_array) {
-	//$strings_array = $GLOBALS['strings'];
 	$ser_array = serialize($strings_array);
 	$ser_no = STRING_SERIALIZE_IT;
 	
@@ -19,10 +36,8 @@ function run_unserialize($strings_array) {
 		$var = unserialize($ser_array);
 	}
 }
-// does some dummy replacements
+
 function run_string_preg_replace($strs) {
-	//$strs = $GLOBALS['strings'];
-	
 	$patterns = array("/process/", "/Intel/", "/10/", "/DOS/", "/uranium/", "/php/");
 	$replacements = array("thread", "Spark", "12", "MS", "Iron", "python");
 	
@@ -40,8 +55,7 @@ function run_string_preg_replace($strs) {
 	}
 }
 function run_string_preg_replace_callback($strs) {
-	//$strs = $GLOBALS['strings'];
-	
+
 	$patterns = array("/process/", "/Intel/", "/10/", "/DOS/", "/uranium/", "/php/");
 	$replacements = array("thread", "Spark", "12", "MS", "Iron", "python");
 	
@@ -53,17 +67,14 @@ function run_string_preg_replace_callback($strs) {
 			$rez1 = preg_replace_callback('/[1-9]/', 'repcb', $strs[$j]);
 			$rez2 = preg_replace_callback('/[A-Z]/', 'repcb',$rez1);
 			$rez3 = preg_replace_callback('/[a-z]+/', 'repcb', $rez2);
-			//echo $rez3;
 		}
-
 	}
 }
 function run_string_str_replace($strs) {
-	//$strs = $GLOBALS['strings'];
 	
 	$patterns = array("/process/", "/Intel/", "/10/", "/DOS/", "/uranium/", "/php/");
 	$replacements = array("thread", "Spark", "12", "MS", "Iron", "python");
-	
+
 	$len = sizeof($strs);
 	for ($i = 0; $i < STRING_STR_REPLACE_IT ;$i++){
 		for ($j=0; $j < $len; $j++) {
@@ -72,14 +83,12 @@ function run_string_str_replace($strs) {
 			$rez1 = str_replace('/[1-9]/', "1", $strs[$j]);
 			$rez2 = str_replace('/[A-Z]/', "_",$rez1);
 			$rez3 = str_replace('/[a-z]+/', "*", $rez2);
-			//echo $rez3;
 		}
 
 	}
 }
 
 function run_string_preg_split($strs) {
-	//$strs = $GLOBALS['strings'];
 	$len = sizeof($strs);
 	$GLOBALS['split_strings'] = array();
 	for ($i = 0; $i < STRING_SPLIT_IT ;$i++){
@@ -93,7 +102,6 @@ function run_string_preg_split($strs) {
 
 }
 function run_string_strtolower($strs) {
-	//$strs = $GLOBALS['strings'];
 	$len = sizeof($strs);
 	for ($i = 0; $i < STRING_STRTOLOWER_IT ;$i++){
 		for ($j=0; $j < $len; $j++) {
@@ -119,7 +127,6 @@ function run_string_in_array($strs) {
 }
 
 function run_string_check_encoding($strs) {
-	//$strs = $GLOBALS['strings'];
 	$len = sizeof($strs);
 	for ($i = 0; $i < STRING_CHECKENCODING_IT ;$i++){
 		for ($j=0; $j < $len; $j++) {
@@ -157,23 +164,19 @@ function run_string_concat($strs) {
 }
 
 function run_string_trim($str) {
-	//$str = $GLOBALS['s5'];
 	for($i = 0; $i < STRING_TRIM_IT; $i++) {
 		$s = trim($str, " \t\n}{"); 
 	}
 }
 
 function run_string_md5($str) {
-	//$str = $GLOBALS['s6'];
 	for($i = 0; $i < STRING_MD5_IT; $i++) {
 		$s = md5($str); 
 	}	
 }
+
 function run_string_implode($strings_array) {
-	//$strings_array = $GLOBALS['strings'];
 	for($i = 0; $i < STRING_IMPLODE_IT; $i++) {
 		$s = implode($strings_array); 
 	}	
 }
-
-?>
