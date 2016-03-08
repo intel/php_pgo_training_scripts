@@ -25,28 +25,28 @@ include 'class.php';
 *	Include huge sections of php code in order to
 * train compile section for consecutive requests.
 */
-include ("dummy_functions/f0.php");
-include ("dummy_functions/f2.php");
-include ("dummy_functions/f3.php");
-include ("dummy_functions/f4.php");
-include ("dummy_functions/f5.php");
-include ("dummy_functions/f6.php");
-include ("dummy_functions/f7.php");
-include ("dummy_functions/f8.php");
-include ("dummy_functions/f9.php");
+// include ("dummy_functions/f0.php");
+// include ("dummy_functions/f2.php");
+// include ("dummy_functions/f3.php");
+// include ("dummy_functions/f4.php");
+// include ("dummy_functions/f5.php");
+// include ("dummy_functions/f6.php");
+// include ("dummy_functions/f7.php");
+// include ("dummy_functions/f8.php");
+// include ("dummy_functions/f9.php");
 
 /**
 *	Include huge section of class code.
 */
-include ("dummy_functions/class_f0.php");
-include ("dummy_functions/class_f2.php");
-include ("dummy_functions/class_f3.php");
-include ("dummy_functions/class_f4.php");
-include ("dummy_functions/class_f5.php");
-include ("dummy_functions/class_f6.php");
-include ("dummy_functions/class_f7.php");
-include ("dummy_functions/class_f8.php");
-include ("dummy_functions/class_f9.php");
+// include ("dummy_functions/class_f0.php");
+// include ("dummy_functions/class_f2.php");
+// include ("dummy_functions/class_f3.php");
+// include ("dummy_functions/class_f4.php");
+// include ("dummy_functions/class_f5.php");
+// include ("dummy_functions/class_f6.php");
+// include ("dummy_functions/class_f7.php");
+// include ("dummy_functions/class_f8.php");
+// include ("dummy_functions/class_f9.php");
 
 /**
 *	Calls Mysql functions from db.php
