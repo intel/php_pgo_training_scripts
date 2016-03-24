@@ -19,7 +19,7 @@
  */
 
 define('DB_USER', 'root');
-define('DB_PASSWORD', '');
+define('DB_PASSWORD', 'root');
 define('DB_NAME', 'pgo_train');
 define('DB_HOST', 'localhost');
 

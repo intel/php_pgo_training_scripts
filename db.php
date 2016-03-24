@@ -123,7 +123,7 @@ class db {
 		if (!$success) {
 			$this->ready = false;
 			die("Error: db_select_fail");
-			return;
+			return false;
 		}
 	}
 

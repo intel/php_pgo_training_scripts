@@ -21,6 +21,7 @@ include 'string.php';
 include 'standard_calls.php';
 include 'class.php';
 
+
 /**
 *	Include huge sections of php code in order to
 * train compile section for consecutive requests.
@@ -53,6 +54,12 @@ include 'class.php';
 */
 function run_mysql_queries() {
 	$newDB = new db(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
+	/* if extension is missing goto next bench module */
+	if (!extension_loaded("mysqli")) {
+		echo "Mysqli is missing!\n";
+		return -1;
+	}
+
 	if (!$newDB->check_connection())
 		die("Connection closed...");
 	else {
@@ -73,6 +80,11 @@ function run_mysql_queries() {
 *	Calls related to date/time from time.php
 */
 function run_time() {
+	/* if extension is missing goto next bench module */
+	if (!extension_loaded("date")) {
+		echo "Date is missing!\n";
+		return -1;
+	}
 	run_strtotime();
 	run_date();
 }
@@ -82,9 +94,25 @@ function run_time() {
 */
 function run_string() {
 
-	/** Six strings variables and an array used as parameters
-	*	to string processing functions
-	*/
+	/* goto next benchmark module if any of standard, 
+	 * mbstring or pcre extensions are missing 
+	 */
+	if (!extension_loaded("standard")) {
+		echo "Standard is missing!\n";
+		return -1;
+	}
+	if (!extension_loaded("mbstring")) {
+		echo "Mbstring is missing!\n";
+		return -1;
+	}
+		
+	if (!extension_loaded("pcre")) {
+		echo "Pcre is missing!\n";
+		return -1;
+	}
+	/* Six strings variables and an array used as parameters
+	 *	to string processing functions
+	 */
 	$s0 = "Uranium is a chemical element with symbol U and atomic number 92.
 	It is a silvery-white metal in the actinide series of the periodic table.
 	A uranium atom has 92 protons and 92 electrons, of which 6 are valence electrons. 
@@ -222,7 +250,10 @@ function run_standard() {
 	$PREG_MATCH_IT  = 10000;
 	$PARSE_URL_IT = 1000;
 
-
+	if (!extension_loaded("standard")) {
+		echo "Standard is missing!\n";
+		return -1;
+	}
 	run_standard_calls($STANDARD_CALL_IT);
 	run_array_map($ARRAY_MAP_IT);
 	run_array_merge($ARRAY_MERGE_IT);

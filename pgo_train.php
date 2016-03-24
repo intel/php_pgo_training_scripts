@@ -18,6 +18,7 @@
 require_once('index.php');
 require_once('constants.php');
 require_once('keys.php');
+include 'check_extensions.php';
 $dictionary = array();
 $references = array();
 
@@ -42,6 +43,12 @@ function get_array_values() {
 
 
 function fill_dictionary($size) {
+
+  if (!extension_loaded("hash")) {
+    echo "Hash is missing!\n";
+    return -1
+  }
+
   $IT = $size / KEYS_SIZE;
   $KEYS = $GLOBALS["KEYS"];
   for($j=0; $j < $IT; $j++)
@@ -95,6 +102,8 @@ function total()
   $pad = str_repeat(" ", 32-strlen("Total")-strlen($num));
   echo "Total".$pad.$num."\n";
 }
+
+check();
 
 $t0 = $t = start_test();
 fill_dictionary(DICTIONARY_IT);
