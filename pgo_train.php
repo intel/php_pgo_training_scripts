@@ -46,7 +46,7 @@ function fill_dictionary($size) {
 
   if (!extension_loaded("hash")) {
     echo "Hash is missing!\n";
-    return -1
+    return -1;
   }
 
   $IT = $size / KEYS_SIZE;
