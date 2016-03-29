@@ -1,18 +1,28 @@
 <?php
-/**************************************************************************
-* Pgo Train Benchmark
+/**
+* PHP PGO Training - to be used during Profile Guided Optimization builds.
 *
-* Copyright (c) 2016, Intel Corporation.
+* Copyright (C) 2016 Intel Corporation
 *
-* This program is free software; you can redistribute it and/or modify it
-* under the terms and conditions of the GNU General Public License,
-* version 2, as published by the Free Software Foundation.
+* This program is free software and open source software; you can redistribute
+* it and/or modify it under the terms of the GNU General Public License as
+* published by the Free Software Foundation; either version 2 of the License,
+* or (at your option) any later version.
 *
-* This program is distributed in the hope it will be useful, but WITHOUT
+* This program is distributed in the hope that it will be useful, but WITHOUT
 * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
 * more details.
-***************************************************************************/
+*
+* You should have received a copy of the GNU General Public License along
+* with this program; if not, write to the Free Software Foundation, Inc.,
+* 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+* http://www.gnu.org/licenses/gpl.html
+*
+* Authors:
+*   Gabriel Samoila <gabriel.c.samoila@intel.com>
+*   Bogdan Andone <bogdan.andone@intel.com>
+*/
 
 require_once('constants.php');
 
