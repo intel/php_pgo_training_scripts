@@ -28,6 +28,13 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
+define( 'OBJECT_K', 'OBJECT_K' );
+define( 'ARRAY_A', 'ARRAY_A' );
+define( 'ARRAY_N', 'ARRAY_N' );
+define( 'OBJECT', 'OBJECT' );
+define( 'object', 'OBJECT' ); // Back compat.
+define('SQL_QUERIES_IT', 40);		/* how many times sql module will run */
+
 class db {
 
 	var $show_errors = false;	

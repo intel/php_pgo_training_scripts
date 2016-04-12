@@ -24,7 +24,10 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
-require_once('constants.php');
+/**
+*   Constants used in class.php
+*/
+define('CLASS_STUDENT_IT', 100);                /* # of classes created */
 
 /**
 *   This php file constains classes that simulates WP classes.
@@ -171,8 +174,8 @@ function create_student() {
     $grade = 0.0;
     call_user_func(array($stud, "set_personal_info"), $name, $date, $grade);
     
-    $fname = "Automatics and Computer Science";
-    $uname = "POLITEHNICA University of Bucharest";
+    $fname = "Some Faculty of Computer Science";
+    $uname = "University of Humans and/or Machines";
     call_user_func(array($stud, "set_fac"), $fname, $uname);
     
     /* some clasic method call */
@@ -199,8 +202,8 @@ function create_last_year_student() {
     $grade = 0.0;
     call_user_func(array($stud, "set_personal_info"), $name, $date, $grade);
     
-    $fname = "Automatics and Computer Science";
-    $uname = "POLITEHNICA University of Bucharest";
+    $fname = "Some Faculty of Computer Science";
+    $uname = "University of Humans and/or Machines";
     call_user_func(array($stud, "set_fac"), $fname, $uname);
     
     /* some clasic method call */
@@ -223,7 +226,7 @@ function create_last_year_student() {
 *   adds them to faculty class
 */
 function run_create_classes() {
-    $fac = new Faculty("Automatics and Computer Science", "Bucharest", "Romania", "POLITEHNICA");
+    $fac = new Faculty("Some Faculty of Computer Science", "GenericCityName", "GenericCountryName", "UNIVERSITY");
     for($i=0; $i < CLASS_STUDENT_IT; $i++) {
         $s = create_student();
         $fac->add_student($s);

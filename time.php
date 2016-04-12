@@ -26,6 +26,10 @@
 
 require_once('constants.php');
 
+
+define('STRTOTIME_IT', 120);		/* # of strtotime() calls */
+define('DATE_IT', 100);				/* # of date() calls */
+
 /* *_IT can be found in constants.php. Modify the value
 	there if you want to change time proportions*/
 function run_strtotime() {

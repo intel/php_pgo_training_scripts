@@ -24,6 +24,24 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
+/** 
+*	Constants used in string.php
+*/
+define('STRING_PREG_REPLACE_IT',15);			/* # of preg_replace() calls */	
+define('STRING_PREG_REPLACE_CALLBACK_IT',2);	/* # of preg_replace_callback() calls */
+define('STRING_STR_REPLACE_IT', 60);			/* # of str_replace() calls */
+define('STRING_SPLIT_IT', 10);					/* # of split() calls */
+define('STRING_STRTOLOWER_IT', 2);				/* # of strtolower() calls */
+define('STRING_CHECKENCODING_IT', 35);			/* # of mb_check_encoding() calls */
+define('STRING_IN_ARRAY_IT', 500);				/* # of in_array() calls */
+define('STRING_ECHO_IT', 1);					/* # echo calls */
+define('STRING_UNSERIALIZE_IT', 1700);			/* # of unserialize() calls */
+define('STRING_SERIALIZE_IT', 500);				/* # of serialize() calls */
+define('STRING_TRIM_IT', 15000);				/* # of trim() calls */
+define('STRING_CONCAT_IT',1);					/* # string concat - not as side effect*/
+define('STRING_MD5_IT', 100);					/* # of md5() calls */
+define('STRING_IMPLODE_IT', 1000);				/* # of implode() calls */
+
 /**
 *	This php file contains calls to standard string processing functions.
 *	Each standard call function have a "run_string_" prefix.

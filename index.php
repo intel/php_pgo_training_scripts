@@ -30,7 +30,8 @@ include 'time.php';
 include 'string.php';
 include 'standard_calls.php';
 include 'class.php';
-
+include 'check_extensions.php';
+include 'dictionary.php';
 
 /**
 *	Include huge sections of php code in order to
@@ -245,34 +246,49 @@ function run_string() {
 
 }
 
+/**
+ *  Modify constants in index.php/run_standard_calls()
+ *	in order to change the proporions.
+ */
+define('STANDARD_CALL_IT', 10000);				/* # of different standard calls */
+define('INI_SET_IT',100);						/* # of set_it() calls*/
+define('FUNC_EXISTS_IT',1000);					/* # of function_exists() calls */
+define('FILE_OPS_IT', 10);						/* # of fopen(), fread(), fclose() calls */
+define('FILE_EXISTS_IT', 500);					/* # of file_exists() calls */
+define('ARRAY_MAP_IT', 4200);					/* # of array_map() calls */
+define('ARRAY_MERGE_IT', 12500);				/* # of array_merge() calls */
+define('PREG_MATCH_IT', 10000);					/* # of preg_match() calls */
+define('PARSE_URL_IT', 1000);					/* # of parse_url() calls */
+define('VERSION_COMPARE_IT', 1200);				/* # of version_compare() calls */
+
 /** Standard php calls. Use variables defined below to
 *	control the proportions of different standard calls.
 */
 function run_standard() {
-	$STANDARD_CALL_IT = 10000;
-	$INI_SET_IT = 100;
-	$FUNC_EXISTS_IT = 1000;
-	$FILE_OPS_IT = 10;
-	$FILE_EXISTS_IT = 500;
-	$ARRAY_MAP_IT = 4200;
-	$VERSION_COMPARE_IT = 1200;
-	$ARRAY_MERGE_IT = 12500;
-	$PREG_MATCH_IT  = 10000;
-	$PARSE_URL_IT = 1000;
+	$STANDARD_CALL_PARAM = STANDARD_CALL_IT;
+	$INI_SET_PARAM = INI_SET_IT;
+	$FUNC_EXISTS_PARAM = FUNC_EXISTS_IT;
+	$FILE_OPS_PARAM = FILE_OPS_IT;
+	$FILE_EXISTS_PARAM = FILE_EXISTS_IT;
+	$ARRAY_MAP_PARAM = ARRAY_MAP_IT;
+	$VERSION_COMPARE_PARAM = VERSION_COMPARE_IT;
+	$ARRAY_MERGE_PARAM = ARRAY_MERGE_IT;
+	$PREG_MATCH_PARAM  = PREG_MATCH_IT;
+	$PARSE_URL_PARAM = PARSE_URL_IT;
 
 	if (!extension_loaded("standard")) {
 		echo "Standard is missing!\n";
 		return -1;
 	}
-	run_standard_calls($STANDARD_CALL_IT);
-	run_array_map($ARRAY_MAP_IT);
-	run_array_merge($ARRAY_MERGE_IT);
-	run_preg_match($PREG_MATCH_IT);
-	run_parse_url($PARSE_URL_IT);
-	run_version_compare($VERSION_COMPARE_IT);
-	run_file_exists($FILE_EXISTS_IT);
-	run_file_operations($FILE_OPS_IT);
-	run_ini_set($INI_SET_IT);
+	run_standard_calls($STANDARD_CALL_PARAM);
+	run_array_map($ARRAY_MAP_PARAM);
+	run_array_merge($ARRAY_MERGE_PARAM);
+	run_preg_match($PREG_MATCH_PARAM);
+	run_parse_url($PARSE_URL_PARAM);
+	run_version_compare($VERSION_COMPARE_PARAM);
+	run_file_exists($FILE_EXISTS_PARAM);
+	run_file_operations($FILE_OPS_PARAM);
+	run_ini_set($INI_SET_PARAM);
 }
 function run_class() {
 	run_create_classes();
@@ -280,3 +296,104 @@ function run_class() {
 function run_hash() {
 	run_hash_array();
 }
+
+
+function getmicrotime()
+{
+  $t = gettimeofday();
+  return ($t['sec'] + $t['usec'] / 1000000);
+}
+
+function start_test()
+{
+//	ob_start();
+  return getmicrotime();
+}
+
+function end_test($start, $name)
+{
+  global $total;
+  $end = getmicrotime();
+//  ob_end_clean();
+  $total += $end-$start;
+  $num = number_format($end-$start,3);
+  $pad = str_repeat(" ", 32-strlen($name)-strlen($num));
+
+  echo $name.$pad.$num."\n";
+//	ob_start();
+  return getmicrotime();
+}
+
+function total()
+{
+  global $total;
+  $pad = str_repeat("-", 32);
+  echo $pad."\n";
+  $num = number_format($total,3);
+  $pad = str_repeat(" ", 32-strlen("Total")-strlen($num));
+  echo "Total".$pad.$num."\n";
+}
+
+check();
+
+$t0 = $t = start_test();
+fill_dictionary(DICTIONARY_IT);
+$t = end_test($t, "fill_dictionary(". DICTIONARY_IT .")");
+fill_dictionary(DICTIONARY_IT);
+$t = end_test($t, "fill_dictionary(". DICTIONARY_IT .")");
+fill_dictionary(DICTIONARY_IT);
+$t = end_test($t, "fill_dictionary(". DICTIONARY_IT .")");
+fill_dictionary(DICTIONARY_IT);
+$t = end_test($t, "fill_dictionary(". DICTIONARY_IT .")");
+echo "--------------------------------\n";
+run_mysql_queries();
+$t = end_test($t, "run_mysql_queries(" . SQL_QUERIES_IT . ")");
+run_mysql_queries();
+$t = end_test($t, "run_mysql_queries(" . SQL_QUERIES_IT . ")");
+run_mysql_queries();
+$t = end_test($t, "run_mysql_queries(" . SQL_QUERIES_IT . ")");
+run_mysql_queries();
+$t = end_test($t, "run_mysql_queries(" . SQL_QUERIES_IT . ")");
+echo "--------------------------------\n";
+run_time();
+$t = end_test($t, "run_time(" . (STRTOTIME_IT + DATE_IT) . ")");
+run_time();
+$t = end_test($t, "run_time(" . (STRTOTIME_IT + DATE_IT) . ")");
+run_time();
+$t = end_test($t, "run_time(" . (STRTOTIME_IT + DATE_IT) . ")");
+run_time();
+$t = end_test($t, "run_time(" . (STRTOTIME_IT + DATE_IT) . ")");
+echo "--------------------------------\n";
+run_string();
+$t = end_test($t, "run_string(" . (STRING_CHECKENCODING_IT + STRING_PREG_REPLACE_IT +
+                                    STRING_STR_REPLACE_IT + STRING_SPLIT_IT + STRING_STRTOLOWER_IT) . ")");
+run_string();
+$t = end_test($t, "run_string(" . (STRING_CHECKENCODING_IT + STRING_PREG_REPLACE_IT +
+                                    STRING_STR_REPLACE_IT + STRING_SPLIT_IT + STRING_STRTOLOWER_IT) . ")");
+run_string();
+$t = end_test($t, "run_string(" . (STRING_CHECKENCODING_IT + STRING_PREG_REPLACE_IT +
+                                    STRING_STR_REPLACE_IT + STRING_SPLIT_IT + STRING_STRTOLOWER_IT) . ")");
+run_string();
+$t = end_test($t, "run_string(" . (STRING_CHECKENCODING_IT + STRING_PREG_REPLACE_IT +
+                                    STRING_STR_REPLACE_IT + STRING_SPLIT_IT + STRING_STRTOLOWER_IT) . ")");
+echo "--------------------------------\n";
+run_standard();
+$t = end_test($t, "run_standard(" . STANDARD_CALL_IT . ")");
+run_standard();
+$t = end_test($t, "run_standard(" . STANDARD_CALL_IT . ")");
+run_standard();
+$t = end_test($t, "run_standard(" . STANDARD_CALL_IT . ")");
+run_standard();
+$t = end_test($t, "run_standard(" . STANDARD_CALL_IT . ")");
+echo "--------------------------------\n";
+run_class();
+$t = end_test($t, "run_class(" . CLASS_STUDENT_IT . ")");
+run_class();
+$t = end_test($t, "run_class(" . CLASS_STUDENT_IT . ")");
+run_class();
+$t = end_test($t, "run_class(" . CLASS_STUDENT_IT . ")");
+run_class();
+$t = end_test($t, "run_class(" . CLASS_STUDENT_IT . ")");
+
+
+total($t0, "Total");
