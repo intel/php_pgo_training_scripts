@@ -24,10 +24,21 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
-/**
-*   Constants used in class.php
-*/
+/* Constants for scaling the number of runs; 
+ * Users can change these value for tuning execution weights
+ */
 define('CLASS_STUDENT_IT', 100);                /* # of classes created */
+
+function class_register_training($functions)
+{
+    $len = sizeof($functions);
+    $functions[$len] = "run_class";
+    return $functions;
+}
+
+function run_class() {
+    run_create_classes();
+}
 
 /**
 *   This php file constains classes that simulates WP classes.

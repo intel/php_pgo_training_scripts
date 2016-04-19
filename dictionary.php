@@ -24,11 +24,24 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
-require_once('constants.php');
-
+/* Constants for scaling the number of runs; 
+ * Users can change these value for tuning execution weights
+ */
 define('KEYS_SIZE', 50);      /* number of keys pregenerated in keys.php */
 define('DICTIONARY_IT', 300000);  /* number of hash-map iterations */
 define('ARRAY_KEYS_IT', 20000);         /* # of array_keys() calls */
+
+function hash_register_training($functions)
+{
+  $len = sizeof($functions);
+  $functions[$len] = "run_hash";
+  return $functions;
+}
+
+function run_hash()
+{
+  fill_dictionary(DICTIONARY_IT);
+}
 
 $KEYS = array("q0################",
 "q1#################",

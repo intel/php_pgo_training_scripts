@@ -24,11 +24,31 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
-require_once('constants.php');
-
-
+/* Constants for scaling the number of runs; 
+ * Users can change these value for tuning execution weights
+ */
 define('STRTOTIME_IT', 120);		/* # of strtotime() calls */
 define('DATE_IT', 100);				/* # of date() calls */
+
+function date_register_training($functions)
+{
+	/* if extension is missing goto next bench module */
+	if (!extension_loaded("date")) {
+		return -1;
+	}
+	$len = sizeof($functions);
+	$functions[$len] = "run_time";
+	return $functions;
+}
+
+/**
+*	Calls related to date/time from time.php
+*/
+function run_time()
+{
+	run_strtotime();
+	run_date();
+}
 
 /* *_IT can be found in constants.php. Modify the value
 	there if you want to change time proportions*/

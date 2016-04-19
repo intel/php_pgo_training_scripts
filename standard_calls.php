@@ -24,19 +24,65 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
-require_once('constants.php');
-/**
-*	Standard calls of 
-*/
+/* Constants for scaling the number of runs; 
+ * Users can change these value for tuning execution weights
+ */
+define('STANDARD_CALL_IT', 10000);				/* # of different standard calls */
+define('INI_SET_IT',100);						/* # of set_it() calls*/
+define('FUNC_EXISTS_IT',1000);					/* # of function_exists() calls */
+define('FILE_OPS_IT', 10);						/* # of fopen(), fread(), fclose() calls */
+define('FILE_EXISTS_IT', 500);					/* # of file_exists() calls */
+define('ARRAY_MAP_IT', 4200);					/* # of array_map() calls */
+define('ARRAY_MERGE_IT', 12500);				/* # of array_merge() calls */
+define('PREG_MATCH_IT', 10000);					/* # of preg_match() calls */
+define('PARSE_URL_IT', 1000);					/* # of parse_url() calls */
+define('VERSION_COMPARE_IT', 1200);				/* # of version_compare() calls */
 
-define('NOT_USED', 420);
-define('NOT_USED1', 777);
+/* entry point for this module will be added into
+	array if required extensions exists */
+function standard_register_training(&$functions)
+{
+	if (!extension_loaded("standard")) {
+		return -1;
+	}
+	$len = sizeof($functions);
+	$functions[$len] = "run_standard";
+	return $functions;
+}
+
+/** Standard php calls. Use variables defined below to
+*	control the proportions of different standard calls.
+*/
+function run_standard() {
+	$STANDARD_CALL_PARAM = STANDARD_CALL_IT;
+	$INI_SET_PARAM = INI_SET_IT;
+	$FUNC_EXISTS_PARAM = FUNC_EXISTS_IT;
+	$FILE_OPS_PARAM = FILE_OPS_IT;
+	$FILE_EXISTS_PARAM = FILE_EXISTS_IT;
+	$ARRAY_MAP_PARAM = ARRAY_MAP_IT;
+	$VERSION_COMPARE_PARAM = VERSION_COMPARE_IT;
+	$ARRAY_MERGE_PARAM = ARRAY_MERGE_IT;
+	$PREG_MATCH_PARAM  = PREG_MATCH_IT;
+	$PARSE_URL_PARAM = PARSE_URL_IT;
+
+	
+	run_standard_calls($STANDARD_CALL_PARAM);
+	run_array_map($ARRAY_MAP_PARAM);
+	run_array_merge($ARRAY_MERGE_PARAM);
+	run_preg_match($PREG_MATCH_PARAM);
+	run_parse_url($PARSE_URL_PARAM);
+	run_version_compare($VERSION_COMPARE_PARAM);
+	run_file_exists($FILE_EXISTS_PARAM);
+	run_file_operations($FILE_OPS_PARAM);
+	run_ini_set($INI_SET_PARAM);
+}
 
 $var_g = "The Intel Core microarchitecture (previously known as the Next-Generation Micro-Architecture)";// is a multi-core processor microarchitecture unveiled by Intel in Q1 2006. It is based on the Yonah processor design and can be considered an iteration of the P6 microarchitecture, introduced in 1995 with Pentium Pro. The high power consumption and heat intensity, the resulting inability to effectively increase clock speed, and other shortcomings such as the inefficient pipeline were the primary reasons for which Intel abandoned the NetBurst microarchitecture and switched to completely different architectural design, delivering high efficiency through a small pipeline rather than high clock speeds. The Core microarchitecture never reached the clock speeds of the Netburst microarchitecture, even after moving to 45 nm lithography.";
 $var1_g = "The = Intel = Core";
 $some_url_g = "http://CentOs:password@intel:8080/go?arg=link#text";
 $test_array1_g = preg_split("/[\s,]+/", $var1_g); 
 $test_array_g = preg_split("/[\s,]+/", $var_g);
+
 
 function do_nothing(&$item, $key) {
 	// nothing at all 

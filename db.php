@@ -28,13 +28,49 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
+/* Constants for scaling the number of runs; 
+ * Users can change these value for tuning execution weights
+ */
+define('SQL_QUERIES_IT', 40);		/* how many times sql module will run */
+
+
 define( 'OBJECT_K', 'OBJECT_K' );
 define( 'ARRAY_A', 'ARRAY_A' );
 define( 'ARRAY_N', 'ARRAY_N' );
 define( 'OBJECT', 'OBJECT' );
 define( 'object', 'OBJECT' ); // Back compat.
-define('SQL_QUERIES_IT', 40);		/* how many times sql module will run */
 
+function mysql_register_training($functions)
+{
+	/* if extension is missing goto next bench module */
+	if (!extension_loaded("mysqli")) {
+		return -1;
+	}
+	$len = sizeof($functions);
+	$functions[$len] = "run_mysql_queries";
+	return $functions;
+}
+
+/**
+*	Calls Mysql functions from db.php
+*/
+function run_mysql_queries() {
+	$newDB = new db(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
+	if (!$newDB->check_connection())
+		die("Connection closed...");
+	else {
+		$names = array("\"WinnieThePooh\"" , "\"Mickey Mouse\"", "\"something\"", "\"random_name\"", "\"YetAnotherName\"", "\"NotINTable\"");
+		for ($i=0; $i < SQL_QUERIES_IT; $i++) {
+			first_query($newDB);
+			second_query($newDB);
+			for ($j = 0; $j < 10; $j++){
+				select_simple_WHERE($newDB, " * ", "col2", $names[$j%6]);
+			}
+			select_INNER_JOIN($newDB);
+			multiple_WHERE_CLAUSES($newDB);
+		}	
+	}
+}
 class db {
 
 	var $show_errors = false;	
