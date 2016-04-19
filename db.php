@@ -57,7 +57,10 @@ function mysql_register_training($functions)
 function run_mysql_queries() {
 	$newDB = new db(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
 	if (!$newDB->check_connection())
-		die("Connection closed...");
+		die("Connection failed.\n".
+			"Make sure the following constants in constants.php: DB_USER, DB_PASSWORD, DB_NAME, DB_HOST.\n".
+			"Make sure you call: </path/to/php>/php init.php\n".
+			"!!!Attention: restart training process from scratch(make clean && make pgo-train)");
 	else {
 		$names = array("\"WinnieThePooh\"" , "\"Mickey Mouse\"", "\"something\"", "\"random_name\"", "\"YetAnotherName\"", "\"NotINTable\"");
 		for ($i=0; $i < SQL_QUERIES_IT; $i++) {
@@ -153,8 +156,10 @@ class db {
 			$this->dbhandle = new mysqli(DB_HOST, DB_USER, DB_PASSWORD);
 			if ( $this->dbhandle->connect_errno ) {
 				$this->dbhandle = null;
-				die("Mysqli connection error: db_connect_fail\n");
-				return false;
+				die("Connection failed.\n".
+				"Make sure the following constants in constants.php: DB_USER, DB_PASSWORD, DB_NAME, DB_HOST.\n".
+				"Make sure you call: </path/to/php>/php init.php\n".
+				"!!!Attention: restart training process from scratch(make clean && make pgo-train)");return false;
 			
 			} elseif ( $this->dbhandle ) {
 				//echo "Connected to " . DB_NAME . "!\n";

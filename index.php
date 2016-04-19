@@ -30,7 +30,6 @@ include 'time.php';
 include 'string.php';
 include 'standard_calls.php';
 include 'class.php';
-include 'check_extensions.php';
 include 'dictionary.php';
 
 function getmicrotime()
