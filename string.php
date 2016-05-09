@@ -24,10 +24,10 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
-/* Constants for scaling the number of runs; 
+/* Constants for scaling the number of runs;
  * Users can change these value for tuning execution weights
  */
-define('STRING_PREG_REPLACE_IT',15);			/* # of preg_replace() calls */	
+define('STRING_PREG_REPLACE_IT',15);			/* # of preg_replace() calls */
 define('STRING_PREG_REPLACE_CALLBACK_IT',2);	/* # of preg_replace_callback() calls */
 define('STRING_STR_REPLACE_IT', 60);			/* # of str_replace() calls */
 define('STRING_SPLIT_IT', 10);					/* # of split() calls */
@@ -48,41 +48,42 @@ define('STRING_IMPLODE_IT', 1000);				/* # of implode() calls */
 */
 $split_strings = array();
 
-function string_register_training($functions)
+function string_register_training(& $functions)
 {
-	/* goto next benchmark module if any of standard, 
-	 * mbstring or pcre extensions are missing 
+	/* goto next benchmark module if any of standard,
+	 * mbstring or pcre extensions are missing
 	 */
 	if (!extension_loaded("standard")) {
+		echo "<WARNING> String benchmark module not loaded: standard extension is missing\n";
 		return -1;
 	}
 	if (!extension_loaded("mbstring")) {
-		return -1;
-	}
-		
-	if (!extension_loaded("pcre")) {
+		echo "<WARNING> String benchmark not module loaded: mbstring extension is missing\n";
 		return -1;
 	}
 
-	$len = sizeof($functions);
-	$functions[$len] = "run_string";
-	return $functions;
+	if (!extension_loaded("pcre")) {
+		echo "<WARNING> String benchmark module not loaded: pcre extension is missing\n";
+		return -1;
+	}
+	echo "String benchmark module loaded!\n";
+	$functions[] = "run_string";
 }
 
 /**
 *	Calls all string processing functions from this module
 */
 function run_string() {
-	
+
 	/* Six strings variables and an array used as parameters
 	 *	to string processing functions
 	 */
 	$s0 = "Uranium is a chemical element with symbol U and atomic number 92.
 	It is a silvery-white metal in the actinide series of the periodic table.
-	A uranium atom has 92 protons and 92 electrons, of which 6 are valence electrons. 
-	Uranium is weakly radioactive because all its isotopes are unstable (with half-lives 
+	A uranium atom has 92 protons and 92 electrons, of which 6 are valence electrons.
+	Uranium is weakly radioactive because all its isotopes are unstable (with half-lives
 	of the six naturally known isotopes, uranium-233 to uranium-238, varying between 69
-	years and 4.5 billion years). The most common isotopes of uranium are uranium-238 
+	years and 4.5 billion years). The most common isotopes of uranium are uranium-238
 	(which has 146 neutrons and accounts for almost 99.3% of the uranium found in nature)
 	and uranium-235 (which has 143 neutrons, accounting for 0.7% of the element found naturally).";
 
@@ -158,13 +159,13 @@ function run_string() {
 	RTORR";
 
 
-	$s5 = " { }  
+	$s5 = " { }
 	if (a == b) {
 		//do something
 		++a;
 		} else {
 			b +=a;
-		}   }  
+		}   }
 		";
 
 	// Wikipedia.org Intel Core(microarchitecture)
@@ -174,12 +175,12 @@ function run_string() {
 	Like the last NetBurst CPUs, Core based processors feature multiple cores and hardware virtualization support (marketed as Intel VT-x), as well as Intel 64 and SSSE3. However, Core-based processors do not have the Hyper-Threading Technology found in Pentium 4 processors. This is because the Core microarchitecture is a descendant of the P6 microarchitecture used by Pentium Pro, Pentium II, Pentium III, and Pentium M.
 	The L1 cache size was enlarged in the Core microarchitecture, from 32 KB on Pentium II/III (16 KB L1 Data + 16 KB L1 Instruction) to 64 KB L1 cache/core (32 KB L1 Data + 32 KB L1 Instruction) on Pentium M and Core/Core 2. It also lacks an L3 Cache found in the Gallatin core of the Pentium 4 Extreme Edition, although an L3 Cache is present in high-end versions of Core-based Xeons. Both an L3 cache and Hyper-threading were reintroduced in the Nehalem microarchitecture.";
 
-	$s7 = " _______           _______  _______  _______  _        _______ 
+	$s7 = " _______           _______  _______  _______  _        _______
 	(  ____ \|\     /|(  ___  )(       )(  ____ )( \      (  ____ \
 	| (    \/( \   / )| (   ) || () () || (    )|| (      | (    \/
-	| (__     \ (_) / | (___) || || || || (____)|| |      | (__    
-	|  __)     ) _ (  |  ___  || |(_)| ||  _____)| |      |  __)   
-	| (       / ( ) \ | (   ) || |   | || (      | |      | (      
+	| (__     \ (_) / | (___) || || || || (____)|| |      | (__
+	|  __)     ) _ (  |  ___  || |(_)| ||  _____)| |      |  __)
+	| (       / ( ) \ | (   ) || |   | || (      | |      | (
 	| (____/\( /   \ )| )   ( || )   ( || )      | (____/\| (____/\
 	(_______/|/     \||/     \||/     \||/       (_______/(_______/
 	                                                               ";
@@ -205,7 +206,7 @@ function  repcb($matches) {
 function run_unserialize($strings_array) {
 	$ser_array = serialize($strings_array);
 	$ser_no = STRING_SERIALIZE_IT;
-	
+
 	for ($i=0; $i < STRING_SERIALIZE_IT; $i++) {
 		$ser_array = serialize($strings_array);
 	}
@@ -218,12 +219,12 @@ function run_unserialize($strings_array) {
 function run_string_preg_replace($strs) {
 	$patterns = array("/process/", "/Intel/", "/10/", "/DOS/", "/uranium/", "/php/");
 	$replacements = array("thread", "Spark", "12", "MS", "Iron", "python");
-	
+
 	$len = sizeof($strs);
 	for ($i = 0; $i < STRING_PREG_REPLACE_IT ;$i++){
 		for ($j=0; $j < $len; $j++) {
 			$rez = preg_replace($patterns, $replacements, $strs[$j]);
-			$rez = preg_replace('/\s+/', '_', $rez);	
+			$rez = preg_replace('/\s+/', '_', $rez);
 			$rez1 = preg_replace('/[1-9]/', "1", $strs[$j]);
 			$rez2 = preg_replace('/[A-Z]/', "_",$rez1);
 			$rez3 = preg_replace('/[a-z]+/', "*", $rez2);
@@ -236,12 +237,12 @@ function run_string_preg_replace_callback($strs) {
 
 	$patterns = array("/process/", "/Intel/", "/10/", "/DOS/", "/uranium/", "/php/");
 	$replacements = array("thread", "Spark", "12", "MS", "Iron", "python");
-	
+
 	$len = sizeof($strs);
 	for ($i = 0; $i < STRING_PREG_REPLACE_CALLBACK_IT ;$i++){
 		for ($j=0; $j < $len; $j++) {
 			$rez = preg_replace_callback($patterns, 'repcb', $strs[$j]);
-			$rez = preg_replace_callback('/\s+/', 'repcb', $rez);	
+			$rez = preg_replace_callback('/\s+/', 'repcb', $rez);
 			$rez1 = preg_replace_callback('/[1-9]/', 'repcb', $strs[$j]);
 			$rez2 = preg_replace_callback('/[A-Z]/', 'repcb',$rez1);
 			$rez3 = preg_replace_callback('/[a-z]+/', 'repcb', $rez2);
@@ -249,7 +250,7 @@ function run_string_preg_replace_callback($strs) {
 	}
 }
 function run_string_str_replace($strs) {
-	
+
 	$patterns = array("/process/", "/Intel/", "/10/", "/DOS/", "/uranium/", "/php/");
 	$replacements = array("thread", "Spark", "12", "MS", "Iron", "python");
 
@@ -257,7 +258,7 @@ function run_string_str_replace($strs) {
 	for ($i = 0; $i < STRING_STR_REPLACE_IT ;$i++){
 		for ($j=0; $j < $len; $j++) {
 			$rez = str_replace($patterns, $replacements, $strs[$j]);
-			$rez = str_replace('/\s+/', '_', $rez);	
+			$rez = str_replace('/\s+/', '_', $rez);
 			$rez1 = str_replace('/[1-9]/', "1", $strs[$j]);
 			$rez2 = str_replace('/[A-Z]/', "_",$rez1);
 			$rez3 = str_replace('/[a-z]+/', "*", $rez2);
@@ -323,14 +324,14 @@ function run_string_echo($strs) {
 		for ($j=0; $j < $len; $j++) {
 			$num_tokens = sizeof($strs[$j]);
 			for ($k = 0; $k < $num_tokens; $k++) {
-				echo $strs[$j][$k] . " " . $strs[$j][$k]; 
+				echo $strs[$j][$k] . " " . $strs[$j][$k];
 			}
 		}
 	}
 }
 
 function run_string_concat($strs) {
-	
+
 	for($i = 0; $i < STRING_CONCAT_IT; $i++) {
 		$var = STRING_ECHO_IT . ' ' . STRING_CHECKENCODING_IT . ' ' . STRING_STRTOLOWER_IT . "/this/is/some/random/path";
 		$var1 = $var . ' - ' . $GLOBALS['s7'];
@@ -343,18 +344,18 @@ function run_string_concat($strs) {
 
 function run_string_trim($str) {
 	for($i = 0; $i < STRING_TRIM_IT; $i++) {
-		$s = trim($str, " \t\n}{"); 
+		$s = trim($str, " \t\n}{");
 	}
 }
 
 function run_string_md5($str) {
 	for($i = 0; $i < STRING_MD5_IT; $i++) {
-		$s = md5($str); 
-	}	
+		$s = md5($str);
+	}
 }
 
 function run_string_implode($strings_array) {
 	for($i = 0; $i < STRING_IMPLODE_IT; $i++) {
-		$s = implode($strings_array); 
-	}	
+		$s = implode($strings_array);
+	}
 }

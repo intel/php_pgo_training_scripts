@@ -24,16 +24,15 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
-/* Constants for scaling the number of runs; 
+/* Constants for scaling the number of runs;
  * Users can change these value for tuning execution weights
  */
 define('CLASS_STUDENT_IT', 100);                /* # of classes created */
 
-function class_register_training($functions)
+function class_register_training(& $functions)
 {
-    $len = sizeof($functions);
-    $functions[$len] = "run_class";
-    return $functions;
+    echo "Class benchmark module loaded!\n";
+    $functions[] = "run_class";
 }
 
 function run_class() {
@@ -45,13 +44,13 @@ function run_class() {
 */
 class Student {
 
-    var $valid = false; 
+    var $valid = false;
     var $string_var = 'This is Student class';
     static $num_instances = 0;
-    var $num_var = 0;   
-    var $float_var = 3.1415;    
+    var $num_var = 0;
+    var $float_var = 3.1415;
     var $grades = array();
-    var $grades_string_array = array('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'); 
+    var $grades_string_array = array('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten');
     var $float_array = array(1.1, 2.2, 3.3, 3.14, 2.73);
     var $bool_array = array(true, false, true, true, false);
     var $storage = array();
@@ -64,7 +63,7 @@ class Student {
     public $available_methods = array("set_float", "get_float", "set_personal_info",
                                          "set_fac", "get_fac", "print", "set_grades",
                                          "get_grades", "get_grade", "make_unusable", "to_string");
-    
+
     function Student() {
         $this->valid = true;
         $this->annual_grade = 0.0;
@@ -178,17 +177,17 @@ function startsWith($haystack, $needle)
 */
 function create_student() {
     $stud =  new Student();
-    
+
     /* some method call by name */
     $name = "James J Jordan";
     $date = "10-09-1993";
     $grade = 0.0;
     call_user_func(array($stud, "set_personal_info"), $name, $date, $grade);
-    
+
     $fname = "Some Faculty of Computer Science";
     $uname = "University of Humans and/or Machines";
     call_user_func(array($stud, "set_fac"), $fname, $uname);
-    
+
     /* some clasic method call */
     $grades = array(10,9,7,9);
     $stud->set_grades($grades);
@@ -206,17 +205,17 @@ function create_student() {
 
 function create_last_year_student() {
     $stud =  new LastYearStudent();
-    
+
     /* some method call by name */
     $name = "Smithy Jones";
     $date = "10-09-1990";
     $grade = 0.0;
     call_user_func(array($stud, "set_personal_info"), $name, $date, $grade);
-    
+
     $fname = "Some Faculty of Computer Science";
     $uname = "University of Humans and/or Machines";
     call_user_func(array($stud, "set_fac"), $fname, $uname);
-    
+
     /* some clasic method call */
     $grades = array(10,9, 10,9);
     $stud->set_grades($grades);

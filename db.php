@@ -28,7 +28,7 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
-/* Constants for scaling the number of runs; 
+/* Constants for scaling the number of runs;
  * Users can change these value for tuning execution weights
  */
 define('SQL_QUERIES_IT', 40);		/* how many times sql module will run */
@@ -40,15 +40,31 @@ define( 'ARRAY_N', 'ARRAY_N' );
 define( 'OBJECT', 'OBJECT' );
 define( 'object', 'OBJECT' ); // Back compat.
 
-function mysql_register_training($functions)
+function mysql_register_training(& $functions)
 {
 	/* if extension is missing goto next bench module */
 	if (!extension_loaded("mysqli")) {
+		echo "<WARNING> MySQL benchmark module not loaded: mysqli extension is missing\n";
 		return -1;
 	}
-	$len = sizeof($functions);
-	$functions[$len] = "run_mysql_queries";
-	return $functions;
+	/* check if a connection to DB is possible */
+	$handler = new mysqli(DB_HOST, DB_USER, DB_PASSWORD);
+	if ( $handler->connect_errno ) {
+		$handler = null;
+		echo "<WARNING> MySQL benchmark module not loaded: Failed to connect\n";
+		return -1;
+	} else {
+		$success  = @mysqli_select_db( $handler, DB_NAME);
+		if (!$success) {
+			echo "<WARNING> MySQL benchmark module not loaded: Failed to select database\n";
+			$handler->close();
+			return -1;
+		}
+	}
+	$handler->close();
+
+	echo "MySQL benchmark module loaded!\n";
+	$functions[] = "run_mysql_queries";
 }
 
 /**
@@ -71,12 +87,12 @@ function run_mysql_queries() {
 			}
 			select_INNER_JOIN($newDB);
 			multiple_WHERE_CLAUSES($newDB);
-		}	
+		}
 	}
 }
 class db {
 
-	var $show_errors = false;	
+	var $show_errors = false;
 	var $last_error = '';	// last error during query
 	var $num_queries = 0;	// amount of queries made
 	var $rows_affected = 0;	// count of affected rows by previous query
@@ -86,7 +102,7 @@ class db {
 	var $result;
 	var $queries;			// queries that were executed
 	var $ready = false;		//queries are ready to start executing
-	var $tables = array( 'table_one', 'table_two', 'table_three'); 
+	var $tables = array( 'table_one', 'table_two', 'table_three');
 	var $reconnect_retries = 2;
 	protected $dbuser;
 	protected $dbpassword;
@@ -101,16 +117,16 @@ class db {
 
 	public function __construct($user, $pass, $dbname, $dbhost) {
 		register_shutdown_function( array( $this, '__destruct' ) );
-		
+
 		if (function_exists('mysqli_connect')) {
 			$this -> use_mysqli = true;
 		}
-		
+
 		$this->dbuser = $user;
 		$this->dbpassword = $pass;
 		$this->dbname = $dbname;
 		$this->dbhost = $dbhost;
-		
+
 		$this->init();
 		$this->db_connect();
 	}
@@ -120,14 +136,14 @@ class db {
 	}
 
 	public function init() {
-		$this->tables = array( 'table_one', 'table_two', 'table_three'); 
+		$this->tables = array( 'table_one', 'table_two', 'table_three');
 		$this->table_one = 'table_one';
 		$this->table_two = 'table_two';
 		$this->table_three = 'table_three';
-			
+
 	}
 	public function db_connect() {
-		
+
 		$new_link = true;
 		$client_flags = 0;
 
@@ -151,7 +167,7 @@ class db {
 					$socket = $port_or_socket;
 				}
 			}
-			
+
 			//@mysqli_real_connect( $this->dbhandle, $host, $this->dbuser, $this->dbpassword, null, $port, $socket, $client_flags );
 			$this->dbhandle = new mysqli(DB_HOST, DB_USER, DB_PASSWORD);
 			if ( $this->dbhandle->connect_errno ) {
@@ -160,15 +176,15 @@ class db {
 				"Make sure the following constants in constants.php: DB_USER, DB_PASSWORD, DB_NAME, DB_HOST.\n".
 				"Make sure you call: </path/to/php>/php init.php\n".
 				"!!!Attention: restart training process from scratch(make clean && make pgo-train)");return false;
-			
+
 			} elseif ( $this->dbhandle ) {
 				//echo "Connected to " . DB_NAME . "!\n";
 				$this->has_connected = true;
 				$this->ready = true;
 				$this->select($this->dbname, $this->dbhandle);
 				return true;
-			} 
-		}	
+			}
+		}
 		return false;
 	}
 
@@ -338,7 +354,7 @@ class db {
 	}
 
 	public function get_results( $query = null, $output = OBJECT ) {
-		
+
 		if ( $query ) {
 			$this->query($query);
 		} else {
@@ -381,7 +397,7 @@ class db {
 	}
 
 	public function get_col( $query = null , $x = 0 ) {
-		
+
 		if ( $query ) {
 			$this->query( $query );
 		}
@@ -457,7 +473,7 @@ function print_row($row) {
 	echo "\n";
 }
 
-/* SELECT wp_posts.* FROM wp_posts WHERE ID IN (1)  
+/* SELECT wp_posts.* FROM wp_posts WHERE ID IN (1)
 	You can find this query in includes/post.php @5925
 */
 function first_query($db_obj) {
@@ -472,7 +488,7 @@ function first_query($db_obj) {
 }
 
 function second_query($db_obj) {
-	/* simulates all of select option stuff from WP queries 
+	/* simulates all of select option stuff from WP queries
 	table1 - col2 = options->option_name
 	table1 - col3 = options->option_value
 	table1 - col2 = options->autoload
@@ -484,7 +500,7 @@ function second_query($db_obj) {
 	$db_obj->dump_result($query, ARRAY_N);
 	if ( !$something_db = $db_obj->get_results( "SELECT col2, col3 FROM $db_obj->table_one WHERE col4 = 'yes'" ) )
 		$something_db = $db_obj->get_results( "SELECT col2, col3 FROM $db_obj->table_one" );
-}	
+}
 
 function select_simple_WHERE($db_obj, $select_this="col3", $col_name="col2", $name="\"something\"") {
 	/* All select option_value from options ...
@@ -492,7 +508,7 @@ function select_simple_WHERE($db_obj, $select_this="col3", $col_name="col2", $na
 	*/
 	$row = $db_obj->get_row("SELECT col3 FROM $db_obj->table_one WHERE $col_name = $name LIMIT 1", ARRAY_N);
 //	print_row($row);
-	if ($row) 
+	if ($row)
 		return true;
 	return false;
 }
@@ -514,8 +530,8 @@ function select_INNER_JOIN($db_obj) {
 
 function multiple_WHERE_CLAUSES($db_obj, $select_this="*", $order_by="ORDER BY col1") {
 
-	$query = "SELECT $select_this FROM $db_obj->table_one WHERE $db_obj->table_one.col3=\"something\" AND $db_obj->table_one.col4=\"yes\" $order_by"; 
+	$query = "SELECT $select_this FROM $db_obj->table_one WHERE $db_obj->table_one.col3=\"something\" AND $db_obj->table_one.col4=\"yes\" $order_by";
 	$result = $db_obj->dump_result($query, ARRAY_N);
 	$row = $db_obj->get_row($query, ARRAY_N);
-	
+
 }

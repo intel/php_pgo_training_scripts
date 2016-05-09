@@ -24,7 +24,7 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
-/* Constants for scaling the number of runs; 
+/* Constants for scaling the number of runs;
  * Users can change these value for tuning execution weights
  */
 define('STANDARD_CALL_IT', 10000);				/* # of different standard calls */
@@ -40,14 +40,15 @@ define('VERSION_COMPARE_IT', 1200);				/* # of version_compare() calls */
 
 /* entry point for this module will be added into
 	array if required extensions exists */
-function standard_register_training(&$functions)
+function standard_register_training(& $functions)
 {
 	if (!extension_loaded("standard")) {
+		echo "<WARNING> Standard benchmark module not loaded: standard extension is missing\n";
 		return -1;
 	}
-	$len = sizeof($functions);
-	$functions[$len] = "run_standard";
-	return $functions;
+
+	echo "Standard benchmark module loaded!\n";
+	$functions[] = "run_standard";
 }
 
 /** Standard php calls. Use variables defined below to
@@ -65,7 +66,7 @@ function run_standard() {
 	$PREG_MATCH_PARAM  = PREG_MATCH_IT;
 	$PARSE_URL_PARAM = PARSE_URL_IT;
 
-	
+
 	run_standard_calls($STANDARD_CALL_PARAM);
 	run_array_map($ARRAY_MAP_PARAM);
 	run_array_merge($ARRAY_MERGE_PARAM);
@@ -80,12 +81,12 @@ function run_standard() {
 $var_g = "The Intel Core microarchitecture (previously known as the Next-Generation Micro-Architecture)";// is a multi-core processor microarchitecture unveiled by Intel in Q1 2006. It is based on the Yonah processor design and can be considered an iteration of the P6 microarchitecture, introduced in 1995 with Pentium Pro. The high power consumption and heat intensity, the resulting inability to effectively increase clock speed, and other shortcomings such as the inefficient pipeline were the primary reasons for which Intel abandoned the NetBurst microarchitecture and switched to completely different architectural design, delivering high efficiency through a small pipeline rather than high clock speeds. The Core microarchitecture never reached the clock speeds of the Netburst microarchitecture, even after moving to 45 nm lithography.";
 $var1_g = "The = Intel = Core";
 $some_url_g = "http://CentOs:password@intel:8080/go?arg=link#text";
-$test_array1_g = preg_split("/[\s,]+/", $var1_g); 
+$test_array1_g = preg_split("/[\s,]+/", $var1_g);
 $test_array_g = preg_split("/[\s,]+/", $var_g);
 
 
 function do_nothing(&$item, $key) {
-	// nothing at all 
+	// nothing at all
 }
 function replace($word) {
 	return "this->" . $word;
@@ -95,7 +96,7 @@ function run_standard_calls($STANDARD_CALL_IT) {
 	$var = "The Intel Core microarchitecture (previously known as the Next-Generation Micro-Architecture)";// is a multi-core processor microarchitecture unveiled by Intel in Q1 2006. It is based on the Yonah processor design and can be considered an iteration of the P6 microarchitecture, introduced in 1995 with Pentium Pro. The high power consumption and heat intensity, the resulting inability to effectively increase clock speed, and other shortcomings such as the inefficient pipeline were the primary reasons for which Intel abandoned the NetBurst microarchitecture and switched to completely different architectural design, delivering high efficiency through a small pipeline rather than high clock speeds. The Core microarchitecture never reached the clock speeds of the Netburst microarchitecture, even after moving to 45 nm lithography.";
 	$var1 = "The = Intel = Core";
 	$some_url = "http://CentOs:password@intel:8080/go?arg=link#text";
-	$test_array1 = preg_split("/[\s,]+/", $var1); 
+	$test_array1 = preg_split("/[\s,]+/", $var1);
 	$test_array = preg_split("/[\s,]+/", $var);
 
 	for ($i = 0 ; $i < $STANDARD_CALL_IT; $i++ ) {
@@ -111,14 +112,14 @@ function run_standard_calls($STANDARD_CALL_IT) {
 		array_diff($test_array1, $test_array);
 		extract($test_array, EXTR_PREFIX_SAME, "wddx");
 		$ks = array_keys($test_array);
-		
+
 	}
 
 }
-function run_ini_set($INI_SET_IT) {	
+function run_ini_set($INI_SET_IT) {
 	$fname='ini_set';
 	for ($i = 0 ; $i < $INI_SET_IT; $i++ ) {
-		
+
 		$fname('set_ini',1);
 	}
 }
@@ -137,7 +138,7 @@ function run_array_merge($ARRAY_MERGE_IT) {
 	$fname = "array_merge";
 	for ($i = 0; $i<$ARRAY_MERGE_IT; $i++) {
 		$rez = $fname($test1, $test);
-		
+
 	}
 }
 function run_preg_match($PREG_MATCH_IT) {
@@ -154,19 +155,19 @@ function run_parse_url($PARSE_URL_IT) {
 	$fname = "parse_url";
 	for($i=0; $i < $PARSE_URL_IT; $i++) {
 		$v = $fname($some_url);
-	}	
+	}
 }
 
 function run_version_compare($VERSION_COMPARE_IT) {
 	for ($i = 0; $i < $VERSION_COMPARE_IT; $i++ ) {
 		$v1 = version_compare(phpversion(), '5.5', '>=');
 		$v2 = version_compare(phpversion(), '7.0', '<=');
-		
+
 	}
-}	
+}
 function run_file_exists($FILE_EXISTS_IT) {
 	for ($i = 0; $i < $FILE_EXISTS_IT; $i++ ) {
-	
+
 		if (file_exists("generic.txt")) {
 			$v = 1;
 		}

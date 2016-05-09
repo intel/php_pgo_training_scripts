@@ -24,18 +24,17 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
-/* Constants for scaling the number of runs; 
+/* Constants for scaling the number of runs;
  * Users can change these value for tuning execution weights
  */
 define('KEYS_SIZE', 50);      /* number of keys pregenerated in keys.php */
 define('DICTIONARY_IT', 300000);  /* number of hash-map iterations */
 define('ARRAY_KEYS_IT', 20000);         /* # of array_keys() calls */
 
-function hash_register_training($functions)
+function hash_register_training(& $functions)
 {
-  $len = sizeof($functions);
-  $functions[$len] = "run_hash";
-  return $functions;
+  echo "Hash benchmark module loaded!\n";
+  $functions[] = "run_hash";
 }
 
 function run_hash()
@@ -134,13 +133,13 @@ function fill_dictionary($size) {
       $new = $$name[$i];
       $new = null;
     }
-  
+
   for ($i = 0; $i < ARRAY_KEYS_IT; $i++) {
     $keys = get_array_keys();
-  }  
+  }
   for ($i = 0; $i < ARRAY_KEYS_IT; $i++) {
     $keys = get_array_values();
-  }  
+  }
 
 }
 

@@ -24,21 +24,22 @@
 *   Bogdan Andone <bogdan.andone@intel.com>
 */
 
-/* Constants for scaling the number of runs; 
+/* Constants for scaling the number of runs;
  * Users can change these value for tuning execution weights
  */
 define('STRTOTIME_IT', 120);		/* # of strtotime() calls */
 define('DATE_IT', 100);				/* # of date() calls */
 
-function date_register_training($functions)
+function date_register_training(& $functions)
 {
 	/* if extension is missing goto next bench module */
 	if (!extension_loaded("date")) {
+		echo "<WARNING> Date benchmark module not loaded: date extension is missing\n";
 		return -1;
 	}
-	$len = sizeof($functions);
-	$functions[$len] = "run_time";
-	return $functions;
+
+	echo "Date benchmark module loaded!\n";
+	$functions[] = "run_time";
 }
 
 /**
@@ -53,14 +54,14 @@ function run_time()
 /* *_IT can be found in constants.php. Modify the value
 	there if you want to change time proportions*/
 function run_strtotime() {
-	$months = array("January", "February", "March", "April", "May", "June", 
+	$months = array("January", "February", "March", "April", "May", "June",
 				"July", "August", "September", "October", "November", "December");
 	for ($i = 0; $i <= STRTOTIME_IT; $i++) {
 		$num = rand();
 		$day = $num%28 + 1;
 		$month = $num%12;
 		$year = 1990 + $num%25;
-		
+
 		$date = $day . " " . $months[$month] . " " . $year;
 		$rez = strtotime($date);
 		$rez = strtotime("now");
@@ -71,7 +72,7 @@ function run_strtotime() {
 		$rez = strtotime("+1 year 28 days 12 hours 13 seconds");
 
 	}
-	
+
 }
 
 function run_date() {

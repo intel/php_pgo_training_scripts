@@ -69,20 +69,21 @@ function total()
 }
 
 $functions = array();
-$functions = hash_register_training($functions);
-$functions = mysql_register_training($functions);
-$functions = date_register_training($functions);
-$functions = string_register_training($functions);
-$functions = standard_register_training($functions);
-$functions = class_register_training($functions);
-
+hash_register_training($functions);
+mysql_register_training($functions);
+date_register_training($functions);
+string_register_training($functions);
+standard_register_training($functions);
+class_register_training($functions);
 $t0 = $t = start_test();
+echo "\n--------------------------------\n";
+echo "-   Benchmark timing results   -\n";
 foreach ($functions as &$fname) {
 	echo "--------------------------------\n";
 	for($i = 0 ; $i < 4; $i++) {
 		$fname();
 		$t = end_test($t, ($i + 1) . "." . $fname);
 	}
-	
+
 }
 total($t0, "Total");
