@@ -51,12 +51,13 @@ function mysql_register_training(& $functions)
 	$handler = new mysqli(DB_HOST, DB_USER, DB_PASSWORD);
 	if ( $handler->connect_errno ) {
 		$handler = null;
-		echo "<WARNING> MySQL benchmark module not loaded: Failed to connect\n";
-		return -1;
+		die("<ERROR> MySQL benchmark module not loaded: mysqli extension is missing\n".
+			"Make sure the following constants in constants.php are correct: DB_USER, DB_PASSWORD, DB_NAME, DB_HOST.\n");
 	} else {
-		$success  = @mysqli_select_db( $handler, DB_NAME);
+		$success  = @mysqli_select_db($handler, DB_NAME);
 		if (!$success) {
-			echo "<WARNING> MySQL benchmark module not loaded: Failed to select database\n";
+			die("<ERROR> MySQL benchmark module not loaded: mysqli extension is missing\n".
+				"Make sure you call: </path/to/php>/php init.php\n");
 			$handler->close();
 			return -1;
 		}
@@ -74,7 +75,7 @@ function run_mysql_queries() {
 	$newDB = new db(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
 	if (!$newDB->check_connection())
 		die("Connection failed.\n".
-			"Make sure the following constants in constants.php: DB_USER, DB_PASSWORD, DB_NAME, DB_HOST.\n".
+			"Make sure the following constants in constants.php are correct: DB_USER, DB_PASSWORD, DB_NAME, DB_HOST.\n".
 			"Make sure you call: </path/to/php>/php init.php\n".
 			"!!!Attention: restart training process from scratch(make clean && make pgo-train)");
 	else {
@@ -173,7 +174,7 @@ class db {
 			if ( $this->dbhandle->connect_errno ) {
 				$this->dbhandle = null;
 				die("Connection failed.\n".
-				"Make sure the following constants in constants.php: DB_USER, DB_PASSWORD, DB_NAME, DB_HOST.\n".
+				"Make sure the following constants in constants.php are correct: DB_USER, DB_PASSWORD, DB_NAME, DB_HOST.\n".
 				"Make sure you call: </path/to/php>/php init.php\n".
 				"!!!Attention: restart training process from scratch(make clean && make pgo-train)");return false;
 
