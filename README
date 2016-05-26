@@ -1,0 +1,102 @@
+CONTENTS OF THIS FILE
+---------------------
+* Introduction
+* Usage
+* Requirements and Configuration files
+* Content
+	- Hash Module
+	- Database Module
+	- Standard Module
+	- String Module
+	- Time Module
+
+
+INTRODUCTION
+------------
+		PGO Train was created as an alternative to a real world workload for
+	pgo train. Compared to other workloads, like WordPress, MediaWiki, Drupal,
+	our project doesn't have to be installed in your computer and only external
+	dependecy is Mysql. This benchmark simulates most of WordPress's execution
+	path.
+
+USAGE:
+------
+		In order to make this benchmark running, modify constants.php file with
+	your mysql credentials.
+		Before runing it for the first time, you'll have to create the database
+	and this can be done running init.php (you can rerun this script whenever you
+	want to bring the database to it's initial state).
+		index.php is the entry point of this benchmark this is the script you'll
+	want to run. In our daily measurements we used -T100 to simulate a real world
+	application run.
+
+	Eg: php -T100 /path/to/pgo_train/index.php
+
+REQUIREMENTS AND CONFIGURATION FILES
+------------
+* PHP version builded with the following extensions included:
+	- mysqli
+	- standard
+	- mbstring
+	- pcre
+	- date
+* Configuration Files:
+	- constants.php: mysql credentials are located here and should be modified
+	accordingly
+	- each module file contains constants that can be modified to change the
+	execution time for each function inside one module.
+
+
+CONTENT
+-------
+
++--------+     +----------+     +----------+     +----------+     +------+                              
++  HASH  +<--->+ DATABASE +<--->+ STANDARD +<--->+  STRING  +<--->+ TIME +                      
++--------+     +----------+     +----------+     +----------+     +------+                     
+
+	 	Each module has it's own register function that receives an array
+	and adds it's module entry point if all the extensions required by that 
+	module exist. index.php gathers all of modules entry points and starts
+	executing all the registered functions. At top level of each module, 
+	you can find constants that controls number of iterations for each
+	function call(all of those constants were empirically set).
+
+	1. Hash Module(dictionary.php): A set of 50 keys is used to store and increment
+	values in an array.
+
+	2. Database Module(db.php): A database connection is created and a series of
+	queries are done(from simple select * from table to updates and select
+	with joins). The database is created using init.php and its content is
+	some random generated data. The tables format is similar to WordPress
+	tables format.
+
+	3. Standard Module(standard_calls.php): The following functions are called
+	inside this module:
+		error_reporting(E_ERROR | E_WARNING | E_PARSE);
+		array_walk($test_array, 'do_nothing');
+		krsort($test_array);
+		ksort($test_array);
+		parse_str($var1);
+		end($test_array);
+		reset($test_array);
+		array_shift($test_array);
+		array_pop($test_array);
+		array_diff($test_array1, $test_array);
+		extract($test_array, EXTR_PREFIX_SAME, "wddx");
+		version_compare(phpversion(), '5.5', '>=');
+		fread($file,"1024");
+		fclose($file);
+
+	4. String Module(string.php): All common string operations are done on an
+	array containing 6 strings:
+		preg_replace
+		preg_replace_callback
+		str_replace
+		str_split
+		md5
+		trim
+		implode
+		mb_check_encoding
+
+	5. Time Module(time.php): Calls strtotime and date using different formats.
+
