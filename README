@@ -1,9 +1,10 @@
 CONTENTS OF THIS FILE
 ---------------------
 * Introduction
+* Prerequisites
+* Installation
 * Usage
-* Requirements and Configuration files
-* Content
+* Modules
 	- Hash Module
 	- Database Module
 	- Standard Module
@@ -12,54 +13,97 @@ CONTENTS OF THIS FILE
 
 
 INTRODUCTION
+-----------
+		PHP PGO Training scripts were created as a representative execution
+	pattern for real life PHP applications like WordPress, MediaWiki or Drupal.
+	When executed during the training phase of a PGO (Profile Guided
+	Optimization) build process these scripts will provide similar statistics
+	as if the PGO training was performed with the real life application.
+		The advantage of using these scripts instead of real applications
+	is that they are easily portable and they don't need complex installation
+	steps as for real live use cases. The only one dependency is on MySQL. In
+	consequencei, the scripts can be easily integrated directly in source
+	ditribution packages of Zend PHP or HHVM in order to offer transparent
+	support for PGO builds.
+		The current version tries to reproduce Wordpress execution behavior.
+	Tested for PGO builds of PHP7 using GCC 5.0, it delivered half of the
+	performance speedups obtained during PGO builds trained with the real
+	applications. It was tested for:
+	- Wordpress 4.2.2: ~3.5% speedup
+	- Drupal 7.36: ~2% speedup
+	- MediaWiki 1.23.9: ~1.5% speedup
+
+
+PREREQUISITES
+-------------
+		PHP PGO Training Scripts assume you want to build optimized PHP/HHVM
+	binaries from scratch following the Profile Guided Optimization build process.
+	Here is the list of prerequisites:
+	- prerequisites of building PHP7/HHVM binaries from scratch (see build
+	  documentation on PHP7/HHVM for more details)
+	- a C/C++ compiler supporting profile guided optimized builds. We used GCC 5.0
+	- a MySQL server installed, if database operations are targeted for training
+
+
+INSTALLATION
 ------------
-		PGO Train was created as an alternative to a real world workload for
-	pgo train. Compared to other workloads, like WordPress, MediaWiki, Drupal,
-	our project doesn't have to be installed in your computer and only external
-	dependecy is Mysql. This benchmark simulates most of WordPress's execution
-	path.
+		Copying the PHP PGO training scripts in a folder is enough if you are
+	not interested in training database accesses. Otherwise, you shall also:
+	1. Configure access credentials to MySQL server. Edit 'constants.php' file
+	   and document the following fields:
+	   - DB_USER: name of a valid database user
+	   - DB_PASSWORD: password of the database user
+	   - DB_HOST: the datatabse host to be used for training
+	   - DB_NAME: name of the database to be created and used for training
+	2. Install the training database on the MySQL server; you can rerun this
+	   script whenever you want to bring the database to it's initial state:
+	     $ php /path/to/php_pgo_training_scripts/init.php
 
 USAGE:
 ------
-		In order to make this benchmark running, modify constants.php file with
-	your mysql credentials.
-		Before runing it for the first time, you'll have to create the database
-	and this can be done running init.php (you can rerun this script whenever you
-	want to bring the database to it's initial state).
-		index.php is the entry point of this benchmark this is the script you'll
-	want to run. In our daily measurements we used -T100 to simulate a real world
-	application run.
+		The entry point for executing the entire bunch of scripts is 'index.php'.
+	For reproducing closely a real live execution scenario where we assume a HTTP
+	server is loading and compiling once the PHP scripts and executes them many
+	times, we need to reduce the weight of the compilation phase during the training
+	execution. The following command was good enough for this purpose:
+	     $ php-cgi -T100 /path/to/php_pgo_training_scripts/index.php
+	Of course, we assumed 'opcache' enabled in case of PHP7.
 
-	Eg: php -T100 /path/to/pgo_train/index.php
+		The following steps are an example on how to perform a PGO build on
+	PHP7 using these training scripts:
+	     $ cd /path/to/php-src
+	     $ ./configure ...  # see PHP installation details for more info
+	     $ make prof-gen    # builds instrumented binaries for execution statistcs
+	                        # gathering
+	     $ ./sapi/cgi/php-cgi -T100 /path/to/php_pgo_training_scripts/index.php
+	     $ make prof-clean  # cleans up the project but preserves
+	                        # gathered statistics
+	     $ make prof-use    # rebuilds binaries based on gathered statistics
+	     $ sudo make install
 
-REQUIREMENTS AND CONFIGURATION FILES
-------------
-* PHP version builded with the following extensions included:
-	- mysqli
-	- standard
-	- mbstring
-	- pcre
-	- date
-* Configuration Files:
-	- constants.php: mysql credentials are located here and should be modified
-	accordingly
-	- each module file contains constants that can be modified to change the
-	execution time for each function inside one module.
+		For executiong all training scenarios the following PHP extensions
+	shall be enabled in PHP during the initial configuration phase:
+	  - standard
+	  - mysqli
+	  - mbstring
+	  - pcre
+	  - date
+	If one of the above extensions is not found at runtime the scripts will
+	 skip the associated trainings and will issue a warning message.
 
 
-CONTENT
+Modules
 -------
 
-+--------+     +----------+     +----------+     +----------+     +------+                              
-+  HASH  +<--->+ DATABASE +<--->+ STANDARD +<--->+  STRING  +<--->+ TIME +                      
++--------+     +----------+     +----------+     +----------+     +------+
++  HASH  +<--->+ DATABASE +<--->+ STANDARD +<--->+  STRING  +<--->+ TIME +
 +--------+     +----------+     +----------+     +----------+     +------+                     
 
-	 	Each module has it's own register function that receives an array
-	and adds it's module entry point if all the extensions required by that 
-	module exist. index.php gathers all of modules entry points and starts
-	executing all the registered functions. At top level of each module, 
-	you can find constants that controls number of iterations for each
-	function call(all of those constants were empirically set).
+		At top level of each module you can find constants that controls
+	the number of iterations for each basic training. These constants were
+	empirically set based on observations on Wordpress execution pattern.
+	If you need to change the relative weight between different kind of loads,
+	they can be adjusted depending on needs.
 
 	1. Hash Module(dictionary.php): A set of 50 keys is used to store and increment
 	values in an array.
