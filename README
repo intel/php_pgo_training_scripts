@@ -95,9 +95,9 @@ USAGE:
 Modules
 -------
 
-+--------+     +----------+     +----------+     +----------+     +------+
-+  HASH  +<--->+ DATABASE +<--->+ STANDARD +<--->+  STRING  +<--->+ TIME +
-+--------+     +----------+     +----------+     +----------+     +------+                     
+    +--------+     +----------+     +----------+     +----------+     +------+
+    +  HASH  +<--->+ DATABASE +<--->+ STANDARD +<--->+  STRING  +<--->+ TIME +
+    +--------+     +----------+     +----------+     +----------+     +------+                     
 
 		At top level of each module you can find constants that controls
 	the number of iterations for each basic training. These constants were
