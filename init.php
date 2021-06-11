@@ -149,6 +149,7 @@ function initDB() {
     $conn->close();
 }
 
+mysqli_report(MYSQLI_REPORT_OFF);
 initDB();
 printExistingDB();
 ?>
