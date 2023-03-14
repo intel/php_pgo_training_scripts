@@ -104,7 +104,7 @@ function run_standard_calls($STANDARD_CALL_IT) {
 		array_walk($test_array, 'do_nothing');
 		krsort($test_array);
 		ksort($test_array);
-		parse_str($var1);
+		parse_str($var1, $dummy);
 		end($test_array);
 		reset($test_array);
 		array_shift($test_array);
